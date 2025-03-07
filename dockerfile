@@ -1,6 +1,10 @@
 # Use the official OpenJDK 21 image
 FROM openjdk:21-jdk
 
+USER root
+RUN chmod +x /var/lib/jenkins/workspace/restapiscicd/mvnw
+USER jenkins
+
 # Set the working directory inside the container
 WORKDIR /app
 
