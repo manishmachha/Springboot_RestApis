@@ -13,10 +13,17 @@ pipeline {
             }
         }
 
+        stage('Prepare Workspace') {
+            steps {
+                sh 'sudo chown -R jenkins:jenkins /var/lib/jenkins/workspace/restapiscicd'
+                sh 'chmod +x /var/lib/jenkins/workspace/restapiscicd/mvnw'
+            }
+        }
+
         stage('Build JAR') {
             steps {
-                sh 'sudo chmod +x /var/lib/jenkins/workspace/restapiscicd/mvnw'
-                sh 'sudo -u jenkins /var/lib/jenkins/workspace/restapiscicd/mvnw clean package'
+                sh 'su - jenkins -c "chmod +x /var/lib/jenkins/workspace/restapiscicd/mvnw"'
+                sh 'su - jenkins -c "/var/lib/jenkins/workspace/restapiscicd/mvnw clean package"'
             }
         }
 
