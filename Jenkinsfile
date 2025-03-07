@@ -15,7 +15,8 @@ pipeline {
 
         stage('Build JAR') {
             steps {
-                sh './mvnw clean package'
+                sh 'sudo chmod +x /var/lib/jenkins/workspace/restapiscicd/mvnw'
+                sh 'sudo -u jenkins /var/lib/jenkins/workspace/restapiscicd/mvnw clean package'
             }
         }
 
