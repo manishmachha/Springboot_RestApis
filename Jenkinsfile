@@ -9,7 +9,7 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', url: 'https://github.com/manishmachha/Springboot_RestApis.git'
+                git branch: 'main', url: 'https://manishmachha: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@github.com/manishmachha/Springboot_RestApis.git'
             }
         }
 
