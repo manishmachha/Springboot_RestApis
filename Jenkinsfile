@@ -28,7 +28,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-hub', url: '']) {
+                withDockerRegistry([credentialsId: 'dockerhub-pass', url: '']) {
                     sh 'docker push $CONTAINER_REGISTRY/$IMAGE_NAME'
                 }
             }
@@ -38,7 +38,7 @@ pipeline {
             steps {
                 sshagent(['ec2-key']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no ubuntu@13.51.168.243 '
+                    ssh -o StrictHostKeyChecking=no ubuntu@13.48.136.66 '
                     docker pull $CONTAINER_REGISTRY/$IMAGE_NAME &&
                     docker stop my-app || true &&
                     docker rm my-app || true &&
