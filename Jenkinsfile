@@ -4,9 +4,6 @@ pipeline {
     environment {
         IMAGE_NAME = 'my-spring-boot-app'
         CONTAINER_REGISTRY = 'manishmachha'
-        EC2_USER = 'ubuntu'
-        EC2_HOST = '13.48.136.66'
-        PRIVATE_KEY_PATH = 'C:\\Users\\your-username\\.ssh\\ec2-key.pem' // Update this path
     }
 
     stages {
@@ -41,10 +38,10 @@ pipeline {
         stage('Run Docker Image') {
             steps {
                 bat """
-                        docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest ^&^
-                        docker stop %IMAGE_NAME% ^|^| exit 0 ^&^
-                        docker rm %IMAGE_NAME% ^|^| exit 0 ^&^
-                        docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
+                    docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
+                    docker stop %IMAGE_NAME% || exit 0
+                    docker rm %IMAGE_NAME% || exit 0
+                    docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
                 """
             }
         }
