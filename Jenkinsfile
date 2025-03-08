@@ -39,10 +39,10 @@ pipeline {
                 sshagent(['ec2-key']) {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@13.48.136.66 '
-                    docker pull $CONTAINER_REGISTRY/$IMAGE_NAME &&
+                    docker pull manishmachha/my-spring-boot-app:latest &&
                     docker stop my-spring-boot-app || true &&
                     docker rm my-spring-boot-app || true &&
-                    docker run -d -p 9090:9090 --name app $CONTAINER_REGISTRY/$IMAGE_NAME
+                    docker run -d -p 9090:9090 --name app manishmachha/my-spring-boot-app:latest
                     '
                     '''
                 }
