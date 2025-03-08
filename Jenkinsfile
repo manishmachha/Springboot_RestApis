@@ -40,8 +40,8 @@ pipeline {
                     sh '''
                     ssh -o StrictHostKeyChecking=no ubuntu@13.48.136.66 '
                     docker pull $CONTAINER_REGISTRY/$IMAGE_NAME &&
-                    docker stop my-app || true &&
-                    docker rm my-app || true &&
+                    docker stop my-spring-boot-app || true &&
+                    docker rm my-spring-boot-app || true &&
                     docker run -d -p 9090:9090 --name app $CONTAINER_REGISTRY/$IMAGE_NAME
                     '
                     '''
