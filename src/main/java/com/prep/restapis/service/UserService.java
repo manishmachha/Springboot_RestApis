@@ -20,6 +20,10 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public List<User> createUsers(List<User> users) {
+        return userRepository.saveAll(users);
+    }
+
     // Read a user by ID
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);

@@ -8,7 +8,9 @@ import org.springframework.web.bind.annotation.*;
 import com.prep.restapis.entity.User;
 import com.prep.restapis.service.UserService;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -23,6 +25,15 @@ public class UserController {
     public ResponseEntity<User> createUser(@RequestBody User user) {
         User createdUser = userService.createUser(user);
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+    }
+
+    // Create a new user
+    @PostMapping
+    public ResponseEntity<Object> createUsers(@RequestBody List<User> users) {
+        List<User> createdUsers = userService.createUsers(users);
+        Map<String, List<User>> response = new HashMap<>();
+        response.put("users", createdUsers);
+        return new ResponseEntity<>(users, HttpStatus.CREATED);
     }
 
     // Get a user by ID
