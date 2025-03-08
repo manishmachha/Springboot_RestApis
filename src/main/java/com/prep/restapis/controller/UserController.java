@@ -28,7 +28,7 @@ public class UserController {
     }
 
     // Create a new user
-    @PostMapping
+    @PostMapping("/bulk")
     public ResponseEntity<Object> createUsers(@RequestBody List<User> users) {
         List<User> createdUsers = userService.createUsers(users);
         Map<String, List<User>> response = new HashMap<>();
