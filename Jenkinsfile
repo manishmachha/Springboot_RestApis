@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = 'my-spring-boot-app'
         CONTAINER_REGISTRY = 'manishmachha'
+        DOCKER_HUB_URL = 'https://index.docker.io/v1/'
     }
 
     stages {
@@ -31,13 +32,13 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-key']) {
+                withDockerRegistry([credentialsId: 'docker-key', url: env.DOCKER_HUB_URL]) {
                     bat "docker push %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest"
                 }
             }
         }
 
-        stage('Run Docker Image') {
+        stage('Deploy Application') {
             steps {
                 bat """
                     docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
