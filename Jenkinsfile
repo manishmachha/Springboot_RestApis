@@ -42,9 +42,9 @@ pipeline {
             steps {
                 bat """
                     docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
-                    docker stop app || true
-                    docker rm app || true
-                    docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
+                    docker stop my-spring-boot-app || true
+                    docker rm my-spring-boot-app || true
+                    docker run -d -p 9090:9090 --name my-spring-boot-app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
                 """
             }
         }
