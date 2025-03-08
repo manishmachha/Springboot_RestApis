@@ -39,18 +39,18 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
-    steps {
-        sshagent(['ec2-key']) {
-            sh '''
-            ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST <<EOF
-            docker pull manishmachha/my-spring-boot-app:latest
-            docker stop app || true
-            docker rm app || true
-            docker run -d -p 9090:9090 --name app manishmachha/my-spring-boot-app:latest
+            steps {
+                sshagent(['ec2-key']) {
+                    sh '''
+                    ssh -o StrictHostKeyChecking=no $EC2_USER@$EC2_HOST <<EOF
+                    docker pull manishmachha/my-spring-boot-app:latest
+                    docker stop app || true
+                    docker rm app || true
+                    docker run -d -p 9090:9090 --name app manishmachha/my-spring-boot-app:latest
 EOF
             '''
+                }
+             }
         }
-    }
-}
     }
 }
