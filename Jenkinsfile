@@ -34,9 +34,17 @@ pipeline {
             steps {
                 withDockerRegistry([credentialsId: 'docker-key', url: '']) {
                     bat "docker push %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest"
-                    bat "docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest"
                 }
             }
+        }
+
+        stage('Run Docker Image') {
+            steps {
+                    bat "docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest;"
+                    bat "docker stop %IMAGE_NAME% -ea SilentlyContinue;"
+                    bat "docker rm %IMAGE_NAME% -ea SilentlyContinue;"
+                    bat "docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest"
+                }
         }
 
         // stage('Deploy to EC2') {
