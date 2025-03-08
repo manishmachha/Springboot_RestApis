@@ -41,7 +41,6 @@ pipeline {
         stage('Run Docker Image') {
             steps {
                 bat """
-                    ssh -i %PRIVATE_KEY_PATH% -o StrictHostKeyChecking=no %EC2_USER%@%EC2_HOST% ^
                         docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest ^&^
                         docker stop %IMAGE_NAME% ^|^| exit 0 ^&^
                         docker rm %IMAGE_NAME% ^|^| exit 0 ^&^
