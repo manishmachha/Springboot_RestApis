@@ -9,15 +9,17 @@ pipeline {
     stages {
         stage('Clone Repository') {
             steps {
-                git branch: 'main', 
+                git(
+                    branch: 'main',
                     credentialsId: 'github-key',
                     url: 'https://github.com/manishmachha/Springboot_RestApis.git'
+                )
             }
         }
 
         stage('Build JAR') {
             steps {
-                bat 'mvnw clean package -DskipTests'
+                bat 'mvnw.cmd clean package -DskipTests'
             }
         }
 
@@ -29,7 +31,7 @@ pipeline {
 
         stage('Push Docker Image') {
             steps {
-                withDockerRegistry([credentialsId: 'docker-key', url: '']) {
+                withDockerRegistry([credentialsId: 'docker-key']) {
                     bat "docker push %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest"
                 }
             }
@@ -39,8 +41,8 @@ pipeline {
             steps {
                 bat """
                     docker pull %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
-                    docker stop %IMAGE_NAME% || exit 0
-                    docker rm %IMAGE_NAME% || exit 0
+                    docker stop app || true
+                    docker rm app || true
                     docker run -d -p 9090:9090 --name app %CONTAINER_REGISTRY%/%IMAGE_NAME%:latest
                 """
             }
