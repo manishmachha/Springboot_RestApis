@@ -5,7 +5,7 @@ pipeline {
         IMAGE_NAME = 'my-spring-boot-app'
         CONTAINER_REGISTRY = 'manishmachha'
         EC2_USER = 'ubuntu'
-        EC2_HOST = '13.48.136.66'
+        EC2_HOST = '3.95.63.94'
     }
 
     stages {
