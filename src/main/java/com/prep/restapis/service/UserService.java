@@ -7,7 +7,6 @@ import com.prep.restapis.entity.User;
 import com.prep.restapis.repo.UserRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserService {
@@ -23,6 +22,10 @@ public class UserService {
         return userRepository.existsByUsername(username);
     }
 
+    public boolean existsById(Long id) {
+        return userRepository.existsById(id);
+    }
+
     // Create a new user
     public User createUser(User user) {
         return userRepository.save(user);
@@ -33,8 +36,8 @@ public class UserService {
     }
 
     // Read a user by ID
-    public Optional<User> getUserById(Long id) {
-        return userRepository.findById(id);
+    public User getUserById(Long id) {
+        return userRepository.findById(id).get();
     }
 
     // Read all users

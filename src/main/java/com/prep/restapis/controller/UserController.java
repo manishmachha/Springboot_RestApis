@@ -14,7 +14,6 @@ import jakarta.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -55,10 +54,17 @@ public class UserController {
 
     // Get a user by ID
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        Optional<User> user = userService.getUserById(id);
-        return user.map(ResponseEntity::ok)
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<Object> getUserById(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (!userService.existsById(id)) {
+            response.put("message", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        } else {
+            User user = userService.getUserById(id);
+            return new ResponseEntity<>(user, HttpStatus.OK);
+        }
+
     }
 
     // Get all users
@@ -70,19 +76,36 @@ public class UserController {
 
     // Update a user by ID
     @PutMapping("/{id}")
-    public ResponseEntity<User> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
-        try {
-            User updatedUser = userService.updateUser(id, userDetails);
-            return new ResponseEntity<>(updatedUser, HttpStatus.OK);
-        } catch (RuntimeException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    public ResponseEntity<Object> updateUser(@PathVariable Long id,@Valid @RequestBody User userDetails) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (userService.existsByEmail(userDetails.getEmail())) {
+            response.put("message", "User with this email already exists");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
         }
+
+        if (userService.existsByUsername(userDetails.getUsername())) {
+            response.put("message", "Username is already taken");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+        User updatedUser = userService.updateUser(id, userDetails);
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
     // Delete a user by ID
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
+    public ResponseEntity<Object> deleteUser(@PathVariable Long id) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (!userService.existsById(id)) {
+            response.put("message", "User not found");
+            return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+        }
+        response.clear();
         userService.deleteUser(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        if (!userService.existsById(id)) {
+            response.put("message", " user " + id + " deleted successfully");
+        }
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
