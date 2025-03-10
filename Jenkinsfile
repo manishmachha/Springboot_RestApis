@@ -46,7 +46,7 @@ pipeline {
                     docker pull $CONTAINER_REGISTRY/$IMAGE_NAME:latest
                     docker stop $IMAGE_NAME || true
                     docker rm $IMAGE_NAME || true
-                    docker run -d -p 9090:9090 --name app $CONTAINER_REGISTRY/$IMAGE_NAME:latest
+                    docker run -d -p 9090:9090 --name $IMAGE_NAME $CONTAINER_REGISTRY/$IMAGE_NAME:latest
 EOF
             '''
                 }
