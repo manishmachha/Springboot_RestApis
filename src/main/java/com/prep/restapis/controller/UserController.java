@@ -3,10 +3,13 @@ package com.prep.restapis.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import com.prep.restapis.entity.User;
 import com.prep.restapis.service.UserService;
+
+import jakarta.validation.Valid;
 
 import java.util.HashMap;
 import java.util.List;
@@ -15,16 +18,30 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
+@Validated
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    // Create a new user
     @PostMapping
-    public ResponseEntity<User> createUser(@RequestBody User user) {
+    public ResponseEntity<Object> createUser(@Valid @RequestBody User user) {
+        Map<String, Object> response = new HashMap<>();
+
+        if (userService.existsByEmail(user.getEmail())) {
+            response.put("message", "User with this email already exists");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+
+        if (userService.existsByUsername(user.getUsername())) {
+            response.put("message", "Username is already taken");
+            return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+        }
+
         User createdUser = userService.createUser(user);
-        return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
+        response.put("message", "User created successfully");
+        response.put("user", createdUser);
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     // Create a new user
